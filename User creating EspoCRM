@@ -1,0 +1,39 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.support.select import Select
+driver = webdriver.Chrome(executable_path='C:/chromedriver.exe')
+driver.maximize_window()
+driver.get("https://demo.automationtesting.in/Register.html")
+time.sleep(3)
+first_name_field = driver.find_element_by_xpath("//input[@placeholder='First Name']")
+first_name_field.send_keys("Carter")
+last_name_field = driver.find_element_by_xpath("//input[@placeholder='Last Name']")
+last_name_field.send_keys("Jimmy")
+mail_field = driver.find_element_by_css_selector("#eid .form-control")
+mail_field.send_keys("krakenmoster29@gmail.com")
+phone_field = driver.find_element_by_css_selector(".col-md-4 .ng-pristine.ng-invalid.ng-invalid-required.ng-valid-pattern")
+phone_field.send_keys("1234567890")
+sex = driver.find_element_by_xpath("//input[@value='Male']")
+sex.click()
+day_birth = driver.find_element_by_css_selector("#yearbox")
+select_1 = Select(day_birth)
+select_1.select_by_value("1977")
+month = driver.find_element_by_xpath("//select[@placeholder='Month']")
+select_2 = Select(month)
+select_2.select_by_value("January")
+day = driver.find_element_by_css_selector("#daybox")
+select_3 = Select(day)
+select_3.select_by_value("2")
+password = driver.find_element_by_css_selector("#firstpassword")
+password.send_keys("123456Aa")
+password_check = driver.find_element_by_css_selector("#secondpassword")
+password_check.send_keys("123456Aa")
+# file = ('C:\kitten.jpg')     #здесь идет добавление файла с компьютера
+# upload = driver.find_element_by_css_selector("#imagesrc")
+# upload.send_keys(file)
+driver.execute_script("window.scrollBy(0, 300);")
+time.sleep(3)
+submit_bth = driver.find_element_by_css_selector("submitbtn")
+submit_bth.click() #кнопка не срабатывает из за бага на сайте
+current_page = driver.current_url
+print(current_page) # к сожадению из за селектора кантри не могу нажать сабмит и проверить переход на нужную страницу( думал использовать метод if else
