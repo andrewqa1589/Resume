@@ -36,4 +36,4 @@ time.sleep(3)
 submit_bth = driver.find_element_by_css_selector("submitbtn")
 submit_bth.click() #кнопка не срабатывает из за бага на сайте
 current_page = driver.current_url
-print(current_page) # к сожадению из за селектора кантри не могу нажать сабмит и проверить переход на нужную страницу( думал использовать метод if else
+print(current_page) # к сожалению из за селектора country не могу нажать submit и проверить переход на нужную страницу( думал использовать метод if else
