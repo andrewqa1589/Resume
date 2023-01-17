@@ -1,0 +1,27 @@
+import time
+from selenium import webdriver
+driver = webdriver.Chrome(executable_path='C:/chromedriver.exe')
+driver.maximize_window()
+driver.get("https://ifellow.ru/")
+time.sleep(2)
+cross = driver.find_element_by_css_selector(".info .app-close")
+cross.click()
+positions = driver.find_element_by_css_selector(".links a.button:nth-child(2)")
+positions.click()
+time.sleep(2)
+search_box = driver.find_element_by_css_selector(".content .inner")
+search_box.send_keys("QA engineer")
+time.sleep(2)
+qa_position = driver.find_element_by_link_text("QA engineer")
+qa_position.click()
+time.sleep(2)
+driver.execute_script("window.scrollBy(0, 165);")
+time.sleep(2)
+expected_page = "https://ifellow.ru/career/vacancies/QA_engineer_Russia"
+current_page = driver.current_url
+if expected_page == current_page:
+    print("Вакансия найдена. Url: " + current_page)
+else:
+    print("Вакансия не найдена")
+time.sleep(2)
+driver.quit()
