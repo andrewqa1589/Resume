@@ -1,0 +1,50 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+'''Подавляем рекламу перед открытием страницы и запускаем драйвер.'''
+
+path_to_extension = r'C:\Users\79689\AppData\Local\Google\Chrome\User Data\Default\Extensions\gighmmpiobklfepjocnamgkkbiglidom\5.3.3_0'
+chrome_options = Options()
+chrome_options.add_argument('load-extension=' + path_to_extension)
+driver = webdriver.Chrome(executable_path='C:/chromedriver.exe', chrome_options=chrome_options) # команда драйвера переписана для блокировки рекламы и установки ад блокера
+driver.maximize_window()
+driver.create_options()
+time.sleep(7)
+driver.implicitly_wait(5)
+first_browser_tab = driver.window_handles[0]
+driver.switch_to.window(first_browser_tab)
+driver.get("https://demo.automationtesting.in/WebTable.html")
+
+'''Находим и кликаем кнопку More'''
+
+more_btn = driver.find_element_by_css_selector(".navbar-nav li:nth-child(9)>a")
+more_btn.click()
+
+'''Находим и кликаем кнопку Loader'''
+
+loader_btn = driver.find_element_by_css_selector("li:nth-child(9) ul li:nth-child(6) a")
+loader_btn.click()
+time.sleep(2)
+
+'''Реализуем явное ожидание для текста Run'''
+
+some_element = WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.ID, "loader"), "Run"))
+run_btn_push = driver.find_element_by_id("loader")
+run_btn_push.click()
+
+'''Явное ожидание для слова Lorem'''
+
+lorem_text = WebDriverWait(driver, 30).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, ".modal-body"), "Lorem"))
+time.sleep(2)
+
+'''Явно ожидание для кнопки Save Changes  с последующим кликом и завершением теста'''
+
+save_btn = WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, ".modal-footer .btn-primary"), "Save changes"))
+save_push = driver.find_element_by_css_selector(".modal-footer .btn-primary")
+save_push.click()
+time.sleep(2)
+driver.quit()
