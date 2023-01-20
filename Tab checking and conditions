@@ -1,0 +1,87 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+path_to_extension = r'C:\Users\79689\AppData\Local\Google\Chrome\User Data\Default\Extensions\gighmmpiobklfepjocnamgkkbiglidom\5.3.3_0'
+chrome_options = Options()
+chrome_options.add_argument('load-extension=' + path_to_extension)
+driver = webdriver.Chrome(executable_path='C:/chromedriver.exe', chrome_options=chrome_options) # команда драйвера переписана для блокировки рекламы и установки ад блокера
+driver.maximize_window()
+driver.create_options()
+time.sleep(5)
+driver.implicitly_wait(5)
+first_browser_tab = driver.window_handles[1]
+driver.switch_to.window(first_browser_tab)
+time.sleep(5)
+driver.close()
+first_tab = driver.window_handles[0]
+driver.switch_to.window(first_tab)
+
+"""Добавляем элемент неявного ожидания и переходим на сайт"""
+
+driver.implicitly_wait(5)
+driver.get("https://demo.automationtesting.in/WebTable.html")
+
+"""Находим и кликаем Switch to" -> "Windows"""
+
+switch_btn = driver.find_element_by_css_selector(".nav li:nth-child(4) .dropdown-toggle")
+switch_btn.click()
+window_btn = driver.find_element_by_css_selector("li:nth-child(4) ul li:nth-child(2) a")
+window_btn.click()
+
+"""Находим и нажимаем кнопку click в разделе"""
+
+click_btn = driver.find_element_by_css_selector(".col-xs-offset-1>a>button")
+click_btn.click()
+
+"""Переключаемся на вторую вкладку, закрываем ее и переключаемся на первую"""
+
+first_browser_tab = driver.window_handles[1]
+driver.switch_to.window(first_browser_tab)
+time.sleep(3)
+driver.close()
+first_tab = driver.window_handles[0]
+driver.switch_to.window(first_tab)
+
+"""Находим и кликаем раздел Separate Multiple Windows"""
+
+separate_btn = driver.find_element_by_css_selector(".nav-stacked li:nth-child(3)>a")
+separate_btn.click()
+click_1 = driver.find_element_by_css_selector(".active button")
+click_1.click()
+
+"""Переключаем драйвер на вторую вкладку"""
+
+first_browser_tab = driver.window_handles[1]
+driver.switch_to.window(first_browser_tab)
+time.sleep(3)
+first_tab = driver.window_handles[2]
+driver.switch_to.window(first_tab)
+
+"""Используем явное ожидание и проверяем значение ссылки"""
+
+link_check = WebDriverWait(driver, 10).until(EC.url_to_be("https://demo.automationtesting.in/Index.html"))
+print("Проверка значения 8го пункта задания: " + str(link_check))
+
+"""Используя явное ожидание(EC), проверяем что в браузере открыто 3 вкладки, выводим в консоль результат проверки (True/False)"""
+
+tabs_count = WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(3))
+print("Проверка значения 9го пункта задания: " + str(tabs_count))
+
+"""Вводим почту и нажимаем кнопку"""
+
+email_field = driver.find_element_by_id("email")
+email_field.send_keys("goose@gmail.com")
+time.sleep(3)
+submit_btn = driver.find_element_by_id("enterimg")
+submit_btn.click()
+
+"""Используя явное ожидание проверяем ссылку"""
+
+link_check_2 = WebDriverWait(driver, 10).until(EC.url_to_be("https://demo.automationtesting.in/Register.html"))
+print("Проверка значения 11го пункта задания: " + str(link_check_2))
+
+time.sleep(3)
+driver.quit()
