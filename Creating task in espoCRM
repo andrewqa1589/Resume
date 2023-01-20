@@ -1,0 +1,124 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.support.select import Select
+
+"""На момент отправки код отрабатывет соглаcно заданию, за исключением выбора статуса Started в селекторе раздела Task"""
+
+"""Запускаем драйвер и переходим на сайт"""
+
+driver = webdriver.Chrome(executable_path='C:/chromedriver.exe')
+driver.maximize_window()
+driver.get("https://demo.us.espocrm.com/")
+time.sleep(3)
+
+"""Меняем язык при входе на сайт"""
+
+language = driver.find_element_by_id("field-language")
+language.click()
+language_change = driver.find_element_by_css_selector("option:nth-child(4)")
+language_change.click()
+login_btn = driver.find_element_by_id("btn-login")
+login_btn.click()
+time.sleep(4)
+
+"""Заходим в раздел Activities"""
+
+activities = driver.find_element_by_class_name("fa-calendar")
+activities.click()
+
+"""Переходим в раздел Tasks и нажимаем All"""
+
+tasks = driver.find_element_by_link_text("Tasks")
+tasks.click()
+time.sleep(3)
+all_selector = driver.find_element_by_class_name("dropdown-toggle.filters-button.btn-default")
+all_selector.click()
+
+"""Заполняем чекбокс Only my"""
+
+only_my = driver.find_element_by_css_selector("li.checkbox:nth-child(11)")
+only_my.click()
+time.sleep(3)
+
+"""Заполняем чекбокс всех задач"""
+
+all = driver.find_element_by_class_name("select-all")
+all.click()
+time.sleep(3)
+"""Нажимаем Actions и Update All"""
+actions_btn = driver.find_element_by_css_selector("#content .btn-group.actions:nth-child(1) > .btn.btn-default.btn-xs-wide.dropdown-toggle.actions-button")
+actions_btn.click()
+update = driver.find_element_by_link_text("Mass Update")
+update.click()
+time.sleep(3)
+
+"""Проверяем что кнопка Update недоступна и закрываем"""
+
+update_btn = driver.find_element_by_css_selector(".main-btn-group .btn-xs-wide.disabled.radius-left")
+update_btn_dis = update_btn.get_attribute("disabled")
+print("value of update_btn: ", update_btn_dis)
+if update_btn_dis is None:
+    print("Кнопка Update активна")
+else:
+    print("Кнопка Update не активна")
+cross = driver.find_element_by_class_name("close")
+cross.click()
+time.sleep(3)
+
+"""Создаем задачу"""
+
+create_task = driver.find_element_by_css_selector("#main .btn-default.btn-xs-wide.radius-left")
+create_task.click()
+time.sleep(5)
+name_field = driver.find_element_by_xpath('//input[@data-name="name"]')
+name_field.send_keys("Test")
+
+
+"""Мой код, из-за изменений просто проверяю что по умолчанию стоит Not Started"""
+
+status_field = driver.find_element_by_css_selector(".col-sm-6:nth-child(1) select")
+select = Select(status_field)
+time.sleep(3)
+select.select_by_visible_text("Not Started")
+
+# """ Ваш код """
+# time.sleep(5)
+# status_selector = driver.find_element_by_css_selector(".col-sm-6:nth-child(1) select")
+# select = Select(status_selector)
+# time.sleep(5)
+
+"""Эта часть не срабатывает из за изменений в коде"""
+# select.select_by_index(1)
+# status_selector_started = status_selector.get_attribute("value") # получаем его значение value
+# if status_selector_started == "Started": # сравниваем равно ли значение в value значению "Started"
+#     print("Выбрано значение Started")
+
+"""Нажимаем на кнопку Save"""
+
+save_btn = driver.find_element_by_css_selector(".btn-xs-wide:nth-child(1)")
+save_btn.click()
+time.sleep(3)
+
+"""Ищем и нажимаем кнопку Task"""
+
+task_btn = driver.find_element_by_css_selector(".header-breadcrumbs>div>span>a")
+task_btn.click()
+time.sleep(3)
+
+"""Выбираем чек-бокс первой задачи"""
+
+my_checkbox = driver.find_element_by_xpath("//input[@data-id='5f645885d602251c9']")
+my_checkbox.click()
+time.sleep(3)
+
+"""Вновь создаем переменную для кнопки Action"""
+
+actions_btn = driver.find_element_by_css_selector("#content .btn-group.actions:nth-child(1) > .btn.btn-default.btn-xs-wide.dropdown-toggle.actions-button")
+actions_btn.click()
+
+"""Выбираем пункт Remove"""
+
+remove_btn = driver.find_element_by_link_text("Remove")
+remove_btn.click()
+
+driver.quit()
